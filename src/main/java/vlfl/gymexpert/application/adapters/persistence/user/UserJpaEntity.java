@@ -1,14 +1,17 @@
 package vlfl.gymexpert.application.adapters.persistence.user;
 
+import vlfl.gymexpert.application.adapters.persistence.personalCard.PersonalCardJpaEntity;
+
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 
 @Entity
 @Table(name = "user")
 public class UserJpaEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column
@@ -23,54 +26,48 @@ public class UserJpaEntity {
     @Column
     private Long moneyBalance;
 
-    @Column
-    private Long personalCardId;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private PersonalCardJpaEntity personalCard;
+
+    public UserJpaEntity() {
+    }
+
+    public UserJpaEntity(
+        String firstName,
+        String lastName,
+        String birthDate,
+        Long moneyBalance,
+        PersonalCardJpaEntity personalCard
+    ) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = Date.valueOf(birthDate);
+        this.moneyBalance = moneyBalance;
+        this.personalCard = personalCard;
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public Date getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
     public Long getMoneyBalance() {
         return moneyBalance;
     }
 
-    public void setMoneyBalance(Long moneyBalance) {
-        this.moneyBalance = moneyBalance;
-    }
-
-    public Long getPersonalCardId() {
-        return personalCardId;
-    }
-
-    public void setPersonalCardId(Long personalCardId) {
-        this.personalCardId = personalCardId;
+    public PersonalCardJpaEntity getPersonalCard() {
+        return personalCard;
     }
 }

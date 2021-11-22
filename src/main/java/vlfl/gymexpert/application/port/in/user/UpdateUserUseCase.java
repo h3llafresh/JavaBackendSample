@@ -1,5 +1,7 @@
 package vlfl.gymexpert.application.port.in.user;
 
-public interface UpdateUserUseCase {
+import vlfl.gymexpert.application.domain.User;
 
+public interface UpdateUserUseCase {
+    void updateUser(User newData);
 }

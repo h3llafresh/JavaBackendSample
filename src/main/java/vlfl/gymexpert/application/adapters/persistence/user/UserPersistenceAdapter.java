@@ -1,14 +1,20 @@
 package vlfl.gymexpert.application.adapters.persistence.user;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerErrorException;
+import vlfl.gymexpert.application.adapters.persistence.personalCard.PersonalCardJpaEntity;
+import vlfl.gymexpert.application.domain.PersonalCard;
 import vlfl.gymexpert.application.domain.User;
+import vlfl.gymexpert.application.port.out.user.DeleteUserPort;
 import vlfl.gymexpert.application.port.out.user.LoadUserPort;
 import vlfl.gymexpert.application.port.out.user.SaveUserPort;
+import vlfl.gymexpert.application.port.out.user.UpdateUserPort;
 
 import javax.persistence.EntityNotFoundException;
+import java.sql.SQLException;
 
 @Component
-public class UserPersistenceAdapter implements LoadUserPort, SaveUserPort {
+public class UserPersistenceAdapter implements LoadUserPort, SaveUserPort, UpdateUserPort, DeleteUserPort {
 
     private final SpringDataUserRepository repository;
     private final UserMapper userMapper;
@@ -26,9 +32,21 @@ public class UserPersistenceAdapter implements LoadUserPort, SaveUserPort {
     }
 
     @Override
-    public boolean saveUser(User user) {
-//        User savedUser = repository.save(user);
-//        return savedUser != null;
-        return false;
+    public void saveUserWithPersonalCard(User user, PersonalCard personalCard) {
+        repository.save(userMapper.mapToJpaEntity(user, personalCard));
+    }
+
+    @Override
+    public void updateUser(User user) {
+        Long userID = user.getID();
+        if (repository.existsById(userID)) {
+            PersonalCardJpaEntity personalCard = repository.getById(userID).getPersonalCard();
+            repository.save(userMapper.mapToJpaEntity(user, personalCard));
+        } else throw new ServerErrorException((String.format("User with specified ID (%d) not found", userID)), new SQLException());
+    }
+
+    @Override
+    public void deleteUser(Long ID) {
+        repository.deleteById(ID);
     }
 }

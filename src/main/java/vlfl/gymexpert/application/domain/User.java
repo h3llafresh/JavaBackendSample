@@ -1,6 +1,6 @@
 package vlfl.gymexpert.application.domain;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class User {
 
@@ -84,6 +84,11 @@ public class User {
 
         public UserBuilder birthDate(Date birthDate) {
             this.birthDate = birthDate.toString();
+            return this;
+        }
+
+        public UserBuilder birthDate(String birthDate) {
+            this.birthDate = birthDate;
             return this;
         }
 

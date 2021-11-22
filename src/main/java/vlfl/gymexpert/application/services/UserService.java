@@ -1,40 +1,54 @@
 package vlfl.gymexpert.application.services;
 
 import org.springframework.stereotype.Service;
+import vlfl.gymexpert.application.domain.PersonalCard;
 import vlfl.gymexpert.application.domain.User;
-import vlfl.gymexpert.application.port.in.user.CreateUserUseCase;
+import vlfl.gymexpert.application.port.in.user.CreateUserWithPersonalCardUseCase;
 import vlfl.gymexpert.application.port.in.user.DeleteUserUseCase;
 import vlfl.gymexpert.application.port.in.user.GetUserUseCase;
 import vlfl.gymexpert.application.port.in.user.UpdateUserUseCase;
+import vlfl.gymexpert.application.port.out.user.DeleteUserPort;
 import vlfl.gymexpert.application.port.out.user.LoadUserPort;
 import vlfl.gymexpert.application.port.out.user.SaveUserPort;
+import vlfl.gymexpert.application.port.out.user.UpdateUserPort;
 
 @Service
-public class UserService implements CreateUserUseCase, DeleteUserUseCase, GetUserUseCase, UpdateUserUseCase {
+public class UserService implements CreateUserWithPersonalCardUseCase, DeleteUserUseCase, GetUserUseCase, UpdateUserUseCase {
 
-    private final LoadUserPort loadUserPort;
     private final SaveUserPort saveUserPort;
+    private final LoadUserPort loadUserPort;
+    private final UpdateUserPort updateUserPort;
+    private final DeleteUserPort deleteUserPort;
 
-    public UserService(LoadUserPort loadUserPort, SaveUserPort saveUserPort) {
-        this.loadUserPort = loadUserPort;
+    public UserService(
+        SaveUserPort saveUserPort,
+        LoadUserPort loadUserPort,
+        UpdateUserPort updateUserPort,
+        DeleteUserPort deleteUserPort
+    ) {
         this.saveUserPort = saveUserPort;
+        this.loadUserPort = loadUserPort;
+        this.updateUserPort = updateUserPort;
+        this.deleteUserPort = deleteUserPort;
+    }
+
+    @Override
+    public void createUserWithPersonalCard(User user, PersonalCard personalCard) {
+        saveUserPort.saveUserWithPersonalCard(user, personalCard);
     }
 
     @Override
     public User getUser(Long ID) {
-        User user = loadUserPort.loadUser(ID);
-        System.out.println(user.toString());
         return loadUserPort.loadUser(ID);
     }
 
     @Override
-    public boolean deleteUser(Long ID) {
-        //TODO not yet implemented
-        return false;
+    public void updateUser(User newUserData) {
+        updateUserPort.updateUser(newUserData);
     }
 
     @Override
-    public boolean create(User user) {
-        return saveUserPort.saveUser(user);
+    public void deleteUser(Long ID) {
+        deleteUserPort.deleteUser(ID);
     }
 }
