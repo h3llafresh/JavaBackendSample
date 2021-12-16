@@ -47,7 +47,7 @@ public class UserJpaEntity {
         this.personalCard = personalCard;
     }
 
-    public Long getId() {
+    public Long getID() {
         return id;
     }
 

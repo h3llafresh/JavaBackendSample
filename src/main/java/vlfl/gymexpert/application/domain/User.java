@@ -63,9 +63,7 @@ public class User {
         Long moneyBalance;
         Long personalCardID;
 
-        UserBuilder() {
-
-        }
+        UserBuilder() {}
 
         public UserBuilder id(Long ID) {
             this.ID = ID;

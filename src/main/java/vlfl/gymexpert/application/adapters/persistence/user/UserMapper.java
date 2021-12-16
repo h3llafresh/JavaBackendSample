@@ -13,7 +13,7 @@ public class UserMapper {
         UserJpaEntity userJpaEntity
     ) {
         return User.builder()
-            .id(userJpaEntity.getId())
+            .id(userJpaEntity.getID())
             .firstName(userJpaEntity.getFirstName())
             .lastName(userJpaEntity.getLastName())
             .birthDate(userJpaEntity.getBirthDate())

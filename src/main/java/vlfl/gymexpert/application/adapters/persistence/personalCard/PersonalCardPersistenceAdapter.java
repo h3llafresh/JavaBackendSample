@@ -1,12 +1,10 @@
 package vlfl.gymexpert.application.adapters.persistence.personalCard;
 
-import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerErrorException;
 import vlfl.gymexpert.application.domain.PersonalCard;
 import vlfl.gymexpert.application.port.out.personalCard.LoadPersonalCardPort;
 import vlfl.gymexpert.application.port.out.personalCard.UpdatePersonalCardPort;
-import vlfl.gymexpert.application.util.HibernateUtil;
 
 import javax.persistence.EntityNotFoundException;
 import java.sql.SQLException;
