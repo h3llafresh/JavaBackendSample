@@ -12,6 +12,8 @@ import vlfl.gymexpert.application.port.out.user.UpdateUserPort;
 
 import javax.persistence.EntityNotFoundException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class UserPersistenceAdapter implements LoadUserPort, SaveUserPort, UpdateUserPort, DeleteUserPort {
@@ -29,6 +31,16 @@ public class UserPersistenceAdapter implements LoadUserPort, SaveUserPort, Updat
         UserJpaEntity userJpa = repository.findById(ID)
             .orElseThrow(EntityNotFoundException::new);
         return userMapper.mapToDomainEntity(userJpa);
+    }
+
+    @Override
+    public List<User> loadAllUsers() {
+        List<UserJpaEntity> usersJpa = repository.findAll();
+        ArrayList<User> users = new ArrayList<>();
+        for (UserJpaEntity userJpa: usersJpa) {
+            users.add(userMapper.mapToDomainEntity(userJpa));
+        }
+        return users;
     }
 
     @Override

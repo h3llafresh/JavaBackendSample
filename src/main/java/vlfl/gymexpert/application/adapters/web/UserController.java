@@ -4,10 +4,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import vlfl.gymexpert.application.domain.PersonalCard;
 import vlfl.gymexpert.application.domain.User;
-import vlfl.gymexpert.application.port.in.user.CreateUserWithPersonalCardUseCase;
-import vlfl.gymexpert.application.port.in.user.DeleteUserUseCase;
-import vlfl.gymexpert.application.port.in.user.GetUserUseCase;
-import vlfl.gymexpert.application.port.in.user.UpdateUserUseCase;
+import vlfl.gymexpert.application.port.in.user.*;
+
+import java.util.List;
 
 
 @RestController
@@ -15,17 +14,20 @@ import vlfl.gymexpert.application.port.in.user.UpdateUserUseCase;
 public class UserController {
 
     private final CreateUserWithPersonalCardUseCase createUserWithPersonalCardUseCase;
+    private final GetAllUsersUseCase getAllUsersUseCase;
     private final GetUserUseCase getUserUseCase;
     private final UpdateUserUseCase updateUserUseCase;
     private final DeleteUserUseCase deleteUserUseCase;
 
     public UserController(
         CreateUserWithPersonalCardUseCase createUserWithPersonalCardUseCase,
+        GetAllUsersUseCase getAllUsersUseCase,
         GetUserUseCase getUserUseCase,
         UpdateUserUseCase updateUserUseCase,
         DeleteUserUseCase deleteUserUseCase
     ) {
         this.createUserWithPersonalCardUseCase = createUserWithPersonalCardUseCase;
+        this.getAllUsersUseCase = getAllUsersUseCase;
         this.getUserUseCase = getUserUseCase;
         this.updateUserUseCase = updateUserUseCase;
         this.deleteUserUseCase = deleteUserUseCase;
@@ -56,6 +58,11 @@ public class UserController {
         );
     }
 
+    @GetMapping(value = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
+    List<User> getAllUsers() {
+        return getAllUsersUseCase.getUsers();
+    }
+
     @GetMapping(value = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     User getUser(@PathVariable Long id) {
         return getUserUseCase.getUser(id);
@@ -72,13 +79,13 @@ public class UserController {
     ) {
         updateUserUseCase.updateUser(
             User.builder()
-            .id(id)
-            .firstName(firstName)
-            .lastName(lastName)
-            .birthDate(birthDate)
-            .moneyBalance(moneyBalance)
-            .personalCardID(personalCardId)
-            .build());
+                .id(id)
+                .firstName(firstName)
+                .lastName(lastName)
+                .birthDate(birthDate)
+                .moneyBalance(moneyBalance)
+                .personalCardID(personalCardId)
+                .build());
     }
 
     @DeleteMapping(value = "/delete/{id}")

@@ -10,9 +10,15 @@ import vlfl.gymexpert.application.port.out.gym.UpdateGymPort;
 
 import javax.persistence.EntityNotFoundException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
-public class GymPersistenceAdapter implements LoadGymPort, SaveGymPort, UpdateGymPort, DeleteGymPort {
+public class GymPersistenceAdapter implements
+    LoadGymPort,
+    SaveGymPort,
+    UpdateGymPort,
+    DeleteGymPort {
 
     private final SpringDataGymRepository repository;
     private final GymMapper gymMapper;
@@ -30,6 +36,16 @@ public class GymPersistenceAdapter implements LoadGymPort, SaveGymPort, UpdateGy
     }
 
     @Override
+    public List<Gym> loadAllGyms() {
+        List<GymJpaEntity> gymsJpa = repository.findAll();
+        ArrayList<Gym> gyms = new ArrayList<>();
+        for (GymJpaEntity gymJpa : gymsJpa) {
+            gyms.add(gymMapper.mapToDomainEntity(gymJpa));
+        }
+        return gyms;
+    }
+
+    @Override
     public void saveGym(Gym gym) {
         repository.save(gymMapper.mapToJpaEntity(gym));
     }
@@ -39,7 +55,8 @@ public class GymPersistenceAdapter implements LoadGymPort, SaveGymPort, UpdateGy
         Long gymID = gym.getID();
         if (repository.existsById(gymID)) {
             repository.save(gymMapper.mapToJpaEntity(gym));
-        } else throw new ServerErrorException((String.format("Gym with specified ID (%d) not found", gymID)), new SQLException());
+        } else
+            throw new ServerErrorException((String.format("Gym with specified ID (%d) not found", gymID)), new SQLException());
     }
 
     @Override

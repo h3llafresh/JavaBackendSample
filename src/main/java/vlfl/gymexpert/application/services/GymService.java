@@ -2,17 +2,22 @@ package vlfl.gymexpert.application.services;
 
 import org.springframework.stereotype.Service;
 import vlfl.gymexpert.application.domain.Gym;
-import vlfl.gymexpert.application.port.in.gym.CreateGymUseCase;
-import vlfl.gymexpert.application.port.in.gym.DeleteGymUseCase;
-import vlfl.gymexpert.application.port.in.gym.GetGymUseCase;
-import vlfl.gymexpert.application.port.in.gym.UpdateGymUseCase;
+import vlfl.gymexpert.application.port.in.gym.*;
 import vlfl.gymexpert.application.port.out.gym.DeleteGymPort;
 import vlfl.gymexpert.application.port.out.gym.LoadGymPort;
 import vlfl.gymexpert.application.port.out.gym.SaveGymPort;
 import vlfl.gymexpert.application.port.out.gym.UpdateGymPort;
 
+import java.util.List;
+
 @Service
-public class GymService implements CreateGymUseCase, DeleteGymUseCase, UpdateGymUseCase, GetGymUseCase {
+public class GymService implements
+    CreateGymUseCase,
+    DeleteGymUseCase,
+    UpdateGymUseCase,
+    GetGymUseCase,
+    GetAllGymsUseCase
+{
 
     private final SaveGymPort saveGymPort;
     private final LoadGymPort loadGymPort;
@@ -32,7 +37,7 @@ public class GymService implements CreateGymUseCase, DeleteGymUseCase, UpdateGym
 
     @Override
     public void createGym(Gym gym) {
-
+        saveGymPort.saveGym(gym);
     }
 
     @Override
@@ -48,5 +53,10 @@ public class GymService implements CreateGymUseCase, DeleteGymUseCase, UpdateGym
     @Override
     public void updateGym(Gym gym) {
         updateGymPort.updateGym(gym);
+    }
+
+    @Override
+    public List<Gym> getAllGyms() {
+        return loadGymPort.loadAllGyms();
     }
 }

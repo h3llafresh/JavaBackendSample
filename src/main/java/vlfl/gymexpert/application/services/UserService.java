@@ -3,17 +3,16 @@ package vlfl.gymexpert.application.services;
 import org.springframework.stereotype.Service;
 import vlfl.gymexpert.application.domain.PersonalCard;
 import vlfl.gymexpert.application.domain.User;
-import vlfl.gymexpert.application.port.in.user.CreateUserWithPersonalCardUseCase;
-import vlfl.gymexpert.application.port.in.user.DeleteUserUseCase;
-import vlfl.gymexpert.application.port.in.user.GetUserUseCase;
-import vlfl.gymexpert.application.port.in.user.UpdateUserUseCase;
+import vlfl.gymexpert.application.port.in.user.*;
 import vlfl.gymexpert.application.port.out.user.DeleteUserPort;
 import vlfl.gymexpert.application.port.out.user.LoadUserPort;
 import vlfl.gymexpert.application.port.out.user.SaveUserPort;
 import vlfl.gymexpert.application.port.out.user.UpdateUserPort;
 
+import java.util.List;
+
 @Service
-public class UserService implements CreateUserWithPersonalCardUseCase, DeleteUserUseCase, GetUserUseCase, UpdateUserUseCase {
+public class UserService implements CreateUserWithPersonalCardUseCase, DeleteUserUseCase, GetUserUseCase, UpdateUserUseCase, GetAllUsersUseCase {
 
     private final SaveUserPort saveUserPort;
     private final LoadUserPort loadUserPort;
@@ -50,5 +49,10 @@ public class UserService implements CreateUserWithPersonalCardUseCase, DeleteUse
     @Override
     public void deleteUser(Long ID) {
         deleteUserPort.deleteUser(ID);
+    }
+
+    @Override
+    public List<User> getUsers() {
+        return loadUserPort.loadAllUsers();
     }
 }
